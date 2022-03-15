@@ -81,7 +81,7 @@ alert("This feature is not available in the preview site")
   async function fetchMessages() {
     if (studentSelected.isSelected === false) {
       try {
-        const url = `https://bookwormsbackendpreview.herokuapp.com/teachers/class/feedback/${userId}`;
+        const url = `https://bookwormsbackendpreview.herokuapp.com/teachers/class/feedback`;
 
         const response = await fetch(url, {
           headers: {
