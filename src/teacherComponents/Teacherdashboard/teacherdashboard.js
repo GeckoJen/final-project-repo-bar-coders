@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Styles from "../../../styles/teacherdashboard.module.css";
 import Timesread from "../Graphs/timesread";
 import Pagesread from "../Graphs/pagesread";
@@ -6,23 +6,21 @@ import Booksfinished from "../Graphs/booksfinished";
 import Minutesread from "../Graphs/minutesread";
 import Link from "next/link";
 
-
-function Teacherdashboard({ studentSelected, userObject }) {
-
-  const fetchToken = userObject[0].getIDToken.id_token;
+function Teacherdashboard({ studentSelected }) {
+  
 
   const [pagesRead, setPagesRead] = useState([]);
   const [minutesRead, setMinutesRead] = useState([]);
   const [booksComplete, setBooksComplete] = useState([]);
   const [timesRead, setTimesRead] = useState([]);
-  const [barChartCoins, setBarChartCoins] = useState(true)
+  const [barChartCoins, setBarChartCoins] = useState(true);
 
   async function getClassData() {
     const response = await fetch(
-      "https://fourweekproject.herokuapp.com/teachers/class",
+      "https://bookwormsbackendpreview.herokuapp.com/teachers/class",
       {
         headers: {
-          authorization: `Bearer ${fetchToken}`,
+
           "Content-Type": "application/json",
         },
       }
@@ -39,10 +37,10 @@ function Teacherdashboard({ studentSelected, userObject }) {
 
   async function getStudentData(id) {
     const response = await fetch(
-      `https://fourweekproject.herokuapp.com/teachers/student/${id}`,
+      `https://bookwormsbackendpreview.herokuapp.com/teachers/student/${id}`,
       {
         headers: {
-          authorization: `Bearer ${fetchToken}`,
+   
           "Content-Type": "application/json",
         },
       }
@@ -54,10 +52,7 @@ function Teacherdashboard({ studentSelected, userObject }) {
     setMinutesRead(minutesData.map((day) => day.minutes));
     const booksData = data.studentCompletedBooks;
     setBooksComplete(booksData.map((day) => day.completed));
-  
   }
-
-
 
   useEffect(() => {
     if (studentSelected.isSelected === false) {
@@ -66,8 +61,6 @@ function Teacherdashboard({ studentSelected, userObject }) {
       getStudentData(studentSelected.id);
     }
   }, [studentSelected]);
-
- 
 
   return (
     <div className={Styles.teacherdashboard}>
@@ -82,7 +75,7 @@ function Teacherdashboard({ studentSelected, userObject }) {
         </button>
         <Timesread
           studentSelected={studentSelected}
-          // userObject={userObject}
+      
           timesRead={timesRead}
           barChartCoins={barChartCoins}
         ></Timesread>

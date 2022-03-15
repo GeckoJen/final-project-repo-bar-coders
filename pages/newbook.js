@@ -5,9 +5,9 @@ import rocketicon from "../images/rocketicon.png";
 import styles from "../styles/newbook.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getIDToken } from "../src/lib/firebase/refresh-tokens";
+// import { getIDToken } from "../src/lib/firebase/refresh-tokens";
 
-function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
+function Newbook({ isNewMessage, studentName, getStudentName, studentId }) {
   const router = useRouter();
 
   const [newApiBook, setNewApiBook] = useState();
@@ -16,8 +16,6 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const userId = userObject[0].getIDToken.user_id;
-  const fetchToken = userObject[0].getIDToken.id_token;
 
   useEffect(() => {
     bookSearch();
@@ -45,7 +43,7 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
 
         setNewApiBook({
           id: Date.now(),
-          studentId: userId,
+          studentId: studentId,
           title: data.docs[0].title,
           cover: cover,
           author: data.docs[0].author_name[0],
@@ -60,21 +58,22 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
     }
   }
 
-  async function addBookToDatabase(fetchToken) {
-    try {
-      const url = "https://fourweekproject.herokuapp.com/books";
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${fetchToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newApiBook),
-      });
-      router.push("/studenthome");
-    } catch(err) {
-      console.log("error in addBookToDatabase", err);
-    }
+  async function addBookToDatabase() {
+    alert("This feature is not available in the preview site")
+    router.push("/studenthome");
+    // try {
+    //   const url = "https://bookwormsbackendpreview.herokuapp.com/books";
+    //   await fetch(url, {
+    //     method: "POST",
+    //     headers: {
+    //                 "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(newApiBook),
+    //   });
+    //   router.push("/studenthome");
+    // } catch (err) {
+    //   console.log("error in addBookToDatabase", err);
+    // }
   }
 
   return (
@@ -83,7 +82,7 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
         isNewMessage={isNewMessage}
         studentName={studentName}
         getStudentName={getStudentName}
-        userObject={userObject}
+        studentId={studentId}
       />
       <div className={styles.pageBody}>
         <div className={styles.leftImage}>
@@ -119,10 +118,10 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
           {errorMessage && <p>{errorMessage}</p>}
           {errorMessage ===
             "No matches found. Try again, or add the details yourself." && (
-                          <Link href="/cantfindbook" passHref>
-                <button>Let me add the details myself</button>
-              </Link>
-                     )}
+            <Link href="/cantfindbook" passHref>
+              <button>Let me add the details myself</button>
+            </Link>
+          )}
           {newApiBook && (
             <div>
               <p>Is this your book?</p>
@@ -131,7 +130,7 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
               <div className={styles.buttonDiv}>
                 <button
                   onClick={() => {
-                    addBookToDatabase(fetchToken);
+                    addBookToDatabase();
                   }}
                 >
                   Yes, this is my book
@@ -151,38 +150,6 @@ function Newbook({ isNewMessage, studentName, getStudentName, userObject }) {
   );
 }
 
-// Adding Authentication to this page by checking for valid token
-export async function getServerSideProps({ req, res }) {
-  try {
-    // This is the cookie
-    const cookie = req.cookies.token;
-    // This refreshes the id token
-    const token = await getIDToken(cookie);
-    const isStudent = true;
 
-    if (!token.getIDToken.user_id) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-
-    return {
-      props: {
-        userObject: [token],
-      },
-    };
-  } catch (err) {
-    console.log("THIS ERR WAS:", err);
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-}
 
 export default Newbook;

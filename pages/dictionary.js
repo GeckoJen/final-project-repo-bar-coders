@@ -4,7 +4,7 @@ import rocketicon from "../images/rocketicon.png";
 import Image from "next/image";
 import styles from "../styles/dictionary.module.css";
 import useFetch from "../src/CustomHooks/usefetch";
-import { getIDToken } from "../src/lib/firebase/refresh-tokens";
+// import { getIDToken } from "../src/lib/firebase/refresh-tokens";
 
 function Dictionary({
   isNewMessage,
@@ -13,13 +13,12 @@ function Dictionary({
   getWords,
   getStudentName,
   studentName,
-  userObject,
+  studentId,
 }) {
-  const userId = userObject[0].getIDToken.user_id;
-  const fetchToken = userObject[0].getIDToken.id_token;
+ 
 
   useEffect(() => {
-    getWords(userId, fetchToken);
+    getWords(studentId);
   }, [words]);
 
   const [searchWord, setSearchWord] = useState("");
@@ -75,7 +74,7 @@ function Dictionary({
     e.preventDefault();
 
     if (!words.includes(searchWord)) {
-      updateWordsList(searchWord, meanings, fetchToken, userId);
+      updateWordsList(searchWord, meanings, studentId);
     }
     resetMeanings();
     setSearchWord("");
@@ -86,7 +85,7 @@ function Dictionary({
       <Navbar
         isNewMessage={isNewMessage}
         getStudentName={getStudentName}
-        userObject={userObject}
+        studentId={studentId}
         studentName={studentName}
       />
       <div className={styles.pageBody}>
@@ -153,37 +152,6 @@ function Dictionary({
   );
 }
 
-// Adding Authentication to this page by checking for valid token
-export async function getServerSideProps({ req, res }) {
-  try {
-    // This is the cookie
-    const cookie = req.cookies.token;
-    // This refreshes the id token
-    const token = await getIDToken(cookie);
 
-    if (!token.getIDToken.user_id) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-
-    return {
-      props: {
-        userObject: [token],
-      },
-    };
-  } catch (err) {
-    console.log("THIS ERR WAS:", err);
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-}
 
 export default Dictionary;

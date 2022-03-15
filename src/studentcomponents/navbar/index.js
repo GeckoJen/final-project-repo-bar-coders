@@ -5,24 +5,16 @@ import Image from "next/image";
 import bookwormicon from "../../../images/bookwormicon.png";
 import newmessageicon from "../../../images/newmessageicon.png";
 import messagesicon from "../../../images/messagesicon.png";
-import { signOut } from "firebase/auth";
-import { auth } from "../../lib/firebase/firebase-init";
-import { post } from "../../lib/HTTP_Functions/POST";
+
 import { useEffect } from "react";
 
-function Navbar({ isNewMessage, studentName, userObject, getStudentName }) {
-      async function logOut() {
-            // await auth.signOut()
-            await signOut(auth);
-            await post("/api/signOut");
-            window.location.href = "/";
-      }
+function Navbar({ isNewMessage, studentName, studentId, getStudentName }) {
+      
 
-      const userId = userObject[0].getIDToken.user_id;
-      const fetchToken = userObject[0].getIDToken.id_token;
+
 
       useEffect(() => {
-            getStudentName(userId, fetchToken);
+            getStudentName(studentId);
       }, []);
 
       return (
@@ -74,7 +66,7 @@ function Navbar({ isNewMessage, studentName, userObject, getStudentName }) {
                         <Link href="/" passHref>
                               <button
                                     className={styles.logoutbutton}
-                                    onClick={logOut}
+                                    
                               >
                                     Log Out
                               </button>
@@ -107,7 +99,7 @@ function Navbar({ isNewMessage, studentName, userObject, getStudentName }) {
                                     <p>Messages</p>
                               </Link>
                               <Link href="/" passHref>
-                                    <p onClick={logOut}>Log out</p>
+                                    <p >Log out</p>
                               </Link>
                         </div>
                   </div>

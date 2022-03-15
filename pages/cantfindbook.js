@@ -4,14 +4,14 @@ import Image from "next/image";
 import rocketicon from "../images/rocketicon.png";
 import styles from "../styles/cantfindbook.module.css";
 import { useRouter } from "next/router";
-import { getIDToken } from "../src/lib/firebase/refresh-tokens";
+// import { getIDToken } from "../src/lib/firebase/refresh-tokens";
 
 function Cantfindbook({
   isNewMessage,
   studentName,
   studentId,
   getStudentName,
-  userObject,
+
 }) {
   const router = useRouter();
 
@@ -19,31 +19,30 @@ function Cantfindbook({
   const [author, setAuthor] = useState("");
   const [pages, setPages] = useState();
 
-  const userId = userObject[0].getIDToken.user_id;
-  const fetchToken = userObject[0].getIDToken.id_token;
+  async function addBookToDatabase(studentId) {
 
-  async function addBookToDatabase(userId, fetchToken) {
-    try {
-      const url = "https://fourweekproject.herokuapp.com/books";
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${fetchToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: Date.now(),
-          studentId: userId,
-          title: title,
-          cover: "https://www.wallpaperuse.com/wallp/42-425257_m.jpg",
-          author: author,
-          totalPages: pages,
-        }),
-      });
-      router.push("/studenthome");
-    } catch(err) {
-      console.log("error in addBookToDatabase", err);
-    }
+    alert("This feature is not available on the preview site");
+    router.push("/studenthome");
+    // try {
+    //   const url = "https://bookwormsbackendpreview.herokuapp.com/books";
+    //   await fetch(url, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       id: Date.now(),
+    //       studentId: studentId,
+    //       title: title,
+    //       cover: "https://www.wallpaperuse.com/wallp/42-425257_m.jpg",
+    //       author: author,
+    //       totalPages: pages,
+    //     }),
+    //   });
+    //   router.push("/studenthome");
+    // } catch (err) {
+    //   console.log("error in addBookToDatabase", err);
+    // }
   }
 
   return (
@@ -52,7 +51,7 @@ function Cantfindbook({
         isNewMessage={isNewMessage}
         studentName={studentName}
         getStudentName={getStudentName}
-        userObject={userObject}
+        studentId={studentId}
       />
       <div className={styles.pageBody}>
         <div className={styles.leftImage}>
@@ -87,7 +86,7 @@ function Cantfindbook({
           ></input>
           <button
             onClick={() => {
-              addBookToDatabase(userId, fetchToken);
+              addBookToDatabase(studentId);
             }}
           >
             Add book
@@ -101,37 +100,7 @@ function Cantfindbook({
   );
 }
 
-// Adding Authentication to this page by checking for valid token
-export async function getServerSideProps({ req, res }) {
-  try {
-    // This is the cookie
-    const cookie = req.cookies.token;
-    // This refreshes the id token
-    const token = await getIDToken(cookie);
 
-    if (!token.getIDToken.user_id) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
 
-    return {
-      props: {
-        userObject: [token],
-      },
-    };
-  } catch (err) {
-    console.log("THIS ERR WAS:", err);
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-}
 
 export default Cantfindbook;

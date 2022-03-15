@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   const [teacherId, setTeacherId] = useState("3uXBvDCLEKR120deKJBcZzeRyGl1");
 
   //studentId - to be set via Auth?
-  //   const [studentId, setStudentId] = useState("1");
+    const [studentId, setStudentId] = useState("s10");
 
   //studentname - to be set Via fetch
 
@@ -72,12 +72,12 @@ function MyApp({ Component, pageProps }) {
   //   console.log("OOOOOOOOOOO", user);
   // }
 
-  async function getClassList(fetchToken) {
+  async function getClassList() {
     const response = await fetch(
-      "https://fourweekproject.herokuapp.com/teachers/class",
+      "https://bookwormsbackendpreview.herokuapp.com/teachers/class",
       {
         headers: {
-          authorization: `Bearer ${fetchToken}`,
+         
           "Content-Type": "application/json",
         },
       }
@@ -152,13 +152,13 @@ function MyApp({ Component, pageProps }) {
   //Used in dictionary - new word list
   const [words, setWords] = useState(["facilitate", "diminish", "gravitate"]);
 
-  async function getWords(userId, fetchToken) {
+  async function getWords(userId) {
     try {
       const response = await fetch(
-        `https://fourweekproject.herokuapp.com/dictionary/${userId}`,
+        `https://bookwormsbackendpreview.herokuapp.com/dictionary/${userId}`,
         {
           headers: {
-            authorization: `Bearer ${fetchToken}`,
+            
             "Content-Type": "application/json",
           },
         }
@@ -176,14 +176,14 @@ function MyApp({ Component, pageProps }) {
 
   //function to fetch studentName
 
-  async function getStudentData(userId, fetchToken) {
+  async function getStudentData(userId) {
     try {
-      console.log("test")
+      console.log("test");
       const response = await fetch(
-        `https://fourweekproject.herokuapp.com/books/${userId}`,
+        `https://bookwormsbackendpreview.herokuapp.com/books/${userId}`,
         {
           headers: {
-            authorization: `Bearer ${fetchToken}`,
+            
             "Content-Type": "application/json",
           },
         }
@@ -197,18 +197,18 @@ function MyApp({ Component, pageProps }) {
       if (data.bookData.length > 0) {
         setInProgressBooks(data.bookData);
       }
-    } catch(err) {
+    } catch (err) {
       console.log("error within getStudentData", err);
     }
   }
 
-  async function getStudentName(userId, fetchToken) {
+  async function getStudentName(userId) {
     try {
       const response = await fetch(
-        `https://fourweekproject.herokuapp.com/books/${userId}`,
+        `https://bookwormsbackendpreview.herokuapp.com/books/${userId}`,
         {
           headers: {
-            authorization: `Bearer ${fetchToken}`,
+          
             "Content-Type": "application/json",
           },
         }
@@ -216,7 +216,7 @@ function MyApp({ Component, pageProps }) {
       const data = await response.json();
       console.log(data);
       setStudentName(data.name[0].name);
-    } catch(err) {
+    } catch (err) {
       console.log("error in getStudentName", err);
     }
   }
@@ -226,24 +226,25 @@ function MyApp({ Component, pageProps }) {
   // }, []);
 
   //adds new words to dictionary word list
-  async function updateWordsList(newWord, meaning, fetchToken, userId) {
-    try {
-      const url = "https://fourweekproject.herokuapp.com/dictionary";
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${fetchToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          studentId: userId,
-          word: newWord,
-          definition: meaning,
-        }),
-      });
-    } catch(err) {
-      console.log("error in updateWordsList", err)
-    }
+  async function updateWordsList(newWord, meaning, userId) {
+alert("This feature is not available in the preview site")
+    // try {
+    //   const url = "https://bookwormsbackendpreview.herokuapp.com/dictionary";
+    //   await fetch(url, {
+    //     method: "POST",
+    //     headers: {
+          
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       studentId: userId,
+    //       word: newWord,
+    //       definition: meaning,
+    //     }),
+    //   });
+    // } catch (err) {
+    //   console.log("error in updateWordsList", err);
+    // }
   }
 
   // if(studentView){
@@ -254,6 +255,7 @@ function MyApp({ Component, pageProps }) {
     <Component
       {...pageProps}
       teacherId={teacherId}
+      studentId={studentId}
       studentName={studentName}
       isNewMessage={isNewMessage}
       studentDaysRead={studentDaysRead}

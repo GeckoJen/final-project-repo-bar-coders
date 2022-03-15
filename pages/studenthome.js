@@ -5,7 +5,7 @@ import Carousel from "../src/studentcomponents/bookcarousel";
 import styles from "../styles/studenthome.module.css";
 import Link from "next/link";
 import { useEffect } from "react";
-import { getIDToken } from "../src/lib/firebase/refresh-tokens";
+// import { getIDToken } from "../src/lib/firebase/refresh-tokens";
 
 function StudentHome({
   getStudentName,
@@ -17,17 +17,16 @@ function StudentHome({
   updateCurrentBook,
   minutesRead,
   getStudentData,
-  userObject,
+  studentId,
 }) {
-  const userId = userObject[0].getIDToken.user_id;
-  const fetchToken = userObject[0].getIDToken.id_token;
+
 
   useEffect(() => {
-    getStudentData(userId, fetchToken);
-    getStudentName(userId, fetchToken);
+    getStudentData(studentId);
+    getStudentName(studentId);
   }, []);
 
-  console.log("LOOOOOOK", userObject);
+
 
   return (
     <div>
@@ -36,7 +35,7 @@ function StudentHome({
           isNewMessage={isNewMessage}
           studentName={studentName}
           getStudentName={getStudentName}
-          userObject={userObject}
+          studentId={studentId}
         />
         <ProgressBar studentDaysRead={studentDaysRead} />
       </div>
@@ -48,7 +47,7 @@ function StudentHome({
             inProgressBooks={inProgressBooks}
             currentBook={currentBook}
             updateCurrentBook={updateCurrentBook}
-            userObject={userObject}
+         
           />
           <Link href="/newbook" passHref>
             <button className={styles.newBookButton}>
@@ -64,37 +63,6 @@ function StudentHome({
     </div>
   );
 }
-// Adding Authentication to this page by checking for valid token
-export async function getServerSideProps({ req, res }) {
-  try {
-    // This is the cookie
-    const cookie = req.cookies.token;
-    // This refreshes the id token
-    const token = await getIDToken(cookie);
 
-    if (!token.getIDToken.user_id) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-
-    return {
-      props: {
-        userObject: [token],
-      },
-    };
-  } catch (err) {
-    console.log("THIS ERR WAS:", err);
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-}
 
 export default StudentHome;

@@ -1,17 +1,10 @@
 import React from "react";
 import Styles from "../../../styles/teachernavbar.module.css";
 import Link from "next/link";
-import { signOut } from "firebase/auth";
-import { auth } from "../../lib/firebase/firebase-init";
-import { post } from "../../lib/HTTP_Functions/POST";
+
 
 function Teachernavbar() {
-  async function logOut() {
-    // await auth.signOut()
-    await signOut(auth);
-    await post("/api/signOut");
-    window.location.href = "/";
-  }
+  
 
   return (
     <div className={Styles.teachernavbar}>
@@ -28,7 +21,7 @@ function Teachernavbar() {
         </Link>
 
         <Link href="/" passHref>
-          <button className={Styles.logout} onClick={logOut}>
+          <button className={Styles.logout} >
             {" "}
             Log out{" "}
           </button>

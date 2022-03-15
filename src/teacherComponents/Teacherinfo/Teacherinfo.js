@@ -3,67 +3,70 @@ import Styles from "../../../styles/teacherinfo.module.css";
 import Individualstats from "../Individualstats/individualstats";
 import IndividualSummaries from "../IndividualSummaries/individualsummaries";
 
-function Teacherinfo({ studentSelected, userObject, moreThanFour, lessThanFour }) {
+function Teacherinfo({
+  studentSelected,
+
+  moreThanFour,
+  lessThanFour,
+}) {
   //to send a new message:
   const [message, setMessage] = useState("");
 
-  const userId = userObject[0].getIDToken.user_id;
-  const fetchToken = userObject[0].getIDToken.id_token;
 
   async function handleSubmit(event) {
     event.preventDefault();
+alert("This feature is not available in the preview site")
+    // if (studentSelected.isSelected === false) {
+    //   try {
+    //     const url =
+    //       "https://bookwormsbackendpreview.herokuapp.com/teachers/class/feedback";
 
-    if (studentSelected.isSelected === false) {
-      try {
-        const url =
-          "https://fourweekproject.herokuapp.com/teachers/class/feedback";
+    //     await fetch(url, {
+    //       method: "POST",
+    //       headers: {
+        
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         feedbackText: message,
+    //         teacherId: userId,
+    //       }),
+    //     });
 
-        await fetch(url, {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${fetchToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            feedbackText: message,
-            teacherId: userId,
-          }),
-        });
+    //     console.log({
+    //       feedbackText: message,
+    //       teacherId: userId,
+    //       url,
+    //     });
+    //   } catch (err) {
+    //     console.log("error in handleSubmit", err);
+    //   }
+    // } else {
+    //   try {
+    //     const url =
+    //       "https://bookwormsbackendpreview.herokuapp.com/teachers/student/feedback";
 
-        console.log({
-          feedbackText: message,
-          teacherId: userId,
-          url,
-        });
-      } catch(err) {
-        console.log("error in handleSubmit", err);
-      }
-    } else {
-      try {
-        const url =
-          "https://fourweekproject.herokuapp.com/teachers/student/feedback";
+    //     await fetch(url, {
+    //       method: "POST",
+    //       headers: {
+    //         authorization: `Bearer ${fetchToken}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         feedback_text: message,
+    //         student_id: studentSelected.id,
+    //       }),
+    //     });
 
-        await fetch(url, {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${fetchToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            feedback_text: message,
-            student_id: studentSelected.id,
-          }),
-        });
-
-        console.log({
-          feedback_text: message,
-          student_id: studentSelected.id,
-          url,
-        });
-      } catch(err) {
-        console.log("error in handleSubmit", err);
-      }
-    }
+    //     console.log({
+    //       feedback_text: message,
+    //       student_id: studentSelected.id,
+    //       url,
+    //     });
+    //   } catch (err) {
+    //     console.log("error in handleSubmit", err);
+    //   }
+    // }
     setMessage("");
   }
 
@@ -78,32 +81,32 @@ function Teacherinfo({ studentSelected, userObject, moreThanFour, lessThanFour }
   async function fetchMessages() {
     if (studentSelected.isSelected === false) {
       try {
-        const url = `https://fourweekproject.herokuapp.com/teachers/class/feedback/${userId}`;
+        const url = `https://bookwormsbackendpreview.herokuapp.com/teachers/class/feedback/${userId}`;
 
         const response = await fetch(url, {
           headers: {
-            authorization: `Bearer ${fetchToken}`,
+ 
             "Content-Type": "application/json",
           },
         });
         const data = await response.json();
         setSentMessages(data.payload);
-      } catch(err) {
+      } catch (err) {
         console.log("error in fetchMessages", err);
       }
     } else {
       try {
-        const url = `https://fourweekproject.herokuapp.com/teachers/student/feedback/${studentSelected.id}`;
+        const url = `https://bookwormsbackendpreview.herokuapp.com/teachers/student/feedback/${studentSelected.id}`;
 
         const response = await fetch(url, {
           headers: {
-            authorization: `Bearer ${fetchToken}`,
+
             "Content-Type": "application/json",
           },
         });
         const data = await response.json();
         setSentMessages(data.payload);
-      } catch(err) {
+      } catch (err) {
         console.log("error in fetchMessages", err);
       }
     }
@@ -120,7 +123,7 @@ function Teacherinfo({ studentSelected, userObject, moreThanFour, lessThanFour }
           <Individualstats
             studentSelected={studentSelected}
             className={Styles.p1}
-            userObject={userObject}
+      
             moreThanFour={moreThanFour}
             lessThanFour={lessThanFour}
           ></Individualstats>
@@ -156,7 +159,7 @@ function Teacherinfo({ studentSelected, userObject, moreThanFour, lessThanFour }
           <IndividualSummaries
             studentSelected={studentSelected}
             className={Styles.p3}
-            userObject={userObject}
+
           ></IndividualSummaries>
         </div>
 

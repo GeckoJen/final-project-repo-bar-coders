@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import styles from "../../../styles/studentstats.module.css";
 
-function IndividualSummaries({ studentSelected, userObject }) {
+function IndividualSummaries({ studentSelected }) {
   const [summaries, setSummaries] = useState([]);
 
-  const fetchToken = userObject[0].getIDToken.id_token;
+
 
   async function getIndividualSummaries(id) {
     const response = await fetch(
-      `https://fourweekproject.herokuapp.com/teachers/student/summaries/${id}`,
+      `https://bookwormsbackendpreview.herokuapp.com/teachers/student/summaries/${id}`,
       {
         headers: {
-          authorization: `Bearer ${fetchToken}`,
+
           "Content-Type": "application/json",
         },
       }

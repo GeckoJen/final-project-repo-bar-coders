@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import styles from "../../../styles/studentstats.module.css";
 
-function Individualstats({ studentSelected, userObject, moreThanFour, lessThanFour }) {
+function Individualstats({
+  studentSelected,
+
+  moreThanFour,
+  lessThanFour,
+}) {
   const [weeklyData, setWeeklyData] = useState({});
 
-  const fetchToken = userObject[0].getIDToken.id_token;
 
   async function getStudentData(id) {
     const response = await fetch(
-      `https://fourweekproject.herokuapp.com/teachers/student/${id}`,
+      `https://bookwormsbackendpreview.herokuapp.com/teachers/student/${id}`,
       {
         headers: {
-          authorization: `Bearer ${fetchToken}`,
+   
           "Content-Type": "application/json",
         },
       }
@@ -25,14 +29,14 @@ function Individualstats({ studentSelected, userObject, moreThanFour, lessThanFo
     let index = moreThanFour.findIndex(
       (student) => student.student_id === studentSelected.id
     );
-    if (index !== -1) { readingCount = moreThanFour[index].count }
-    else {
+    if (index !== -1) {
+      readingCount = moreThanFour[index].count;
+    } else {
       let index2 = lessThanFour.findIndex(
         (student) => student.student_id === studentSelected.id
       );
-    readingCount = lessThanFour[index2].count
+      readingCount = lessThanFour[index2].count;
     }
-
 
     // const readingCount = data.studentWeeklyReading[0].count;
 

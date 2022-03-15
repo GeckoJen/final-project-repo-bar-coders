@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 //See here for carousel docs: https://openbase.com/js/react-image-gallery
 
 function Carousel({ inProgressBooks, currentBook, updateCurrentBook }) {
-  // const userId = userObject[0].getIDToken.user_id;
+
 
   const router = useRouter();
 
