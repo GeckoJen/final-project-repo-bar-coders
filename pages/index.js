@@ -40,12 +40,15 @@ function Home() {
       </div>
       <div className={styles.rightSide}>
         <h1>Book Worms</h1>
-      
+
         <h3>
           This is a preview version of the Book Worms site. No usernames or
           passwords are required to enter and have a look around, but you will
-          not be able to add new data to the database. Select either `student`
-          or `teacher` below to see the different parts of the site.{" "}
+          not be able to add new data to the database.
+        </h3>
+        <h3>
+          Select either &apos;student&apos; or &apos;teacher&apos; below to see the different parts
+          of the site.
         </h3>
 
         <div className={styles.Buttons}>
